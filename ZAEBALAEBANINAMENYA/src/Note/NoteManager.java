@@ -1,6 +1,6 @@
 package Note;
 
-import Archiveeeeee.Archive;
+import Models.Archive;
 import Interface.IMenu;
 
 import Interface.IUserInput;

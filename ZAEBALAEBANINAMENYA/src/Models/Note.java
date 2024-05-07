@@ -1,4 +1,4 @@
-package Archiveeeeee;
+package Models;
 
 public class Note {
     private String noteText;

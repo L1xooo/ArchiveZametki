@@ -1,6 +1,7 @@
 package Archiveeeeee;
 
 import Interface.*;
+import Models.Archive;
 
 import java.util.List;
 

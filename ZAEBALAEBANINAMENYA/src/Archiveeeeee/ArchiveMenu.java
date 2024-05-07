@@ -2,17 +2,18 @@ package Archiveeeeee;
 
 
 import Interface.IManager;
+import Models.Archive;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArchiveMenu implements IManager<Archive> {
     private List<Archive> archives = new ArrayList<>();
-    private Archive currentArchive;
+    private int nextId = 1;
 
     @Override
     public void create(String name) {
-        archives.add(new Archive(name));
+        archives.add(new Archive(nextId++, name));
     }
 
     @Override
@@ -32,8 +33,8 @@ public class ArchiveMenu implements IManager<Archive> {
     @Override
     public String list() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < archives.size(); i++) {
-            sb.append(i + 1).append(". ").append(archives.get(i).getArchiveName()).append("\n");
+        for (Archive archive : archives) {
+            sb.append(archive.getArchiveId()).append(". ").append(archive.getArchiveName()).append("\n");
         }
         return sb.toString();
     }
@@ -41,13 +42,5 @@ public class ArchiveMenu implements IManager<Archive> {
     @Override
     public List<Archive> getAll() {
         return new ArrayList<>(archives);
-    }
-
-    public Archive getCurrentArchive() {
-        return currentArchive;
-    }
-
-    public void setCurrentArchive(Archive currentArchive) {
-        this.currentArchive = currentArchive;
     }
 }

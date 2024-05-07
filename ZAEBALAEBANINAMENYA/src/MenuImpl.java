@@ -1,19 +1,9 @@
-import Archiveeeeee.Archive;
+import Models.Archive;
 import Archiveeeeee.ArchiveManager;
 import Archiveeeeee.ArchiveMenu;
 import Interface.*;
 import Note.NoteManager;
 import Note.NoteMenu;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import Archiveeeeee.Archive;
-import Archiveeeeee.ArchiveMenu;
-import Note.NoteMenu;
-import Interface.*;
-
-import java.util.List;
 
 public class MenuImpl implements IMenu, IMenuCallback {
     private IUserInput input;
@@ -22,10 +12,10 @@ public class MenuImpl implements IMenu, IMenuCallback {
 
     public MenuImpl(IUserInput input) {
         this.input = input;
-        this.archiveManager = new ArchiveManager(input, new ArchiveMenu(), this); // Передаем this вместо archiveManager
-        this.noteManager = new NoteManager(input, new NoteMenu());
+        ArchiveMenu archiveMenu = new ArchiveMenu();
+        this.archiveManager = new ArchiveManager(input, archiveMenu, this);
+        this.noteManager = new NoteManager(input, new NoteMenu(1));
     }
-
 
     @Override
     public void showMenu() {
@@ -35,15 +25,6 @@ public class MenuImpl implements IMenu, IMenuCallback {
     @Override
     public void run() {
         archiveManager.run();
-
-        }
-
-
-
-
-    @Override
-    public void showNoteMenu() {
-        noteManager.showMenu();
     }
 
     @Override
@@ -53,17 +34,8 @@ public class MenuImpl implements IMenu, IMenuCallback {
             noteManager.run();
         }
     }
-
     @Override
     public void saveState() {
         archiveManager.saveState();
-    }
-
-    public void setArchiveManager(ArchiveManager archiveManager) {
-        this.archiveManager = archiveManager;
-    }
-
-    public void setNoteManager(NoteManager noteManager) {
-        this.noteManager = noteManager;
     }
 }

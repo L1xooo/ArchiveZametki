@@ -1,57 +1,59 @@
 package Note;
 
-import Archiveeeeee.Archive;
-import Archiveeeeee.Note;
+import Models.Archive;
+import Models.Note;
 import Interface.IManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NoteMenu implements IManager<Note> {
-    private Archive currentArchive;
+    private Map<Integer, List<Note>> notesByArchive = new HashMap<>();
+    private int currentArchiveId;
 
-
+    public NoteMenu(int currentArchiveId) {
+        this.currentArchiveId = currentArchiveId;
+    }
 
     @Override
     public void create(String noteText) {
-        if (currentArchive != null) {
-            currentArchive.addNote(new Note(noteText));
-        } else {
-            System.out.println("Архив не выбран.");
-        }
+        List<Note> notes = notesByArchive.computeIfAbsent(currentArchiveId, k -> new ArrayList<>());
+        notes.add(new Note(noteText));
     }
 
     @Override
     public void delete(int index) {
-        if (currentArchive != null && index >= 0 && index < currentArchive.getNotes().size()) {
-            currentArchive.deleteNote(index);
-        } else {
-            System.out.println("Неверный индекс или архив не выбран.");
+        List<Note> notes = notesByArchive.get(currentArchiveId);
+        if (notes != null && index >= 0 && index < notes.size()) {
+            notes.remove(index);
         }
     }
 
     @Override
     public void edit(int index, String newText) {
-        if (currentArchive != null && index >= 0 && index < currentArchive.getNotes().size()) {
-            currentArchive.editNote(index, newText);
-        } else {
-            System.out.println("Неверный индекс или архив не выбран.");
+        List<Note> notes = notesByArchive.get(currentArchiveId);
+        if (notes != null && index >= 0 && index < notes.size()) {
+            notes.get(index).setNoteText(newText);
         }
     }
 
     @Override
     public String list() {
-        if (currentArchive != null) {
-            return currentArchive.listNotes();
+        List<Note> notes = notesByArchive.get(currentArchiveId);
+        if (notes != null && !notes.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < notes.size(); i++) {
+                sb.append((i + 1)).append(". ").append(notes.get(i).getNoteText()).append("\n");
+            }
+            return sb.toString();
         }
-        return "Архив не выбран.";
+        return "";
     }
 
     @Override
     public List<Note> getAll() {
-        if (currentArchive != null) {
-            return new ArrayList<>(currentArchive.getNotes());
-        }
-        return new ArrayList<>();
+        return new ArrayList<>(notesByArchive.getOrDefault(currentArchiveId, new ArrayList<>()));
     }
 }
